@@ -11,6 +11,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from dotenv import load_dotenv
+from decimal import Decimal
 
 # Настройка логгера
 logging.basicConfig(
@@ -43,14 +44,14 @@ async def init_db():
         await conn.execute('''
         CREATE TABLE IF NOT EXISTS admins (
             id SERIAL PRIMARY KEY,
-            chat_id TEXT UNIQUE
+            chat_id VARCHAR UNIQUE
         )
         ''')
         await conn.execute('''
         CREATE TABLE IF NOT EXISTS currencies (
             id SERIAL PRIMARY KEY,
-            currency_name TEXT UNIQUE,
-            rate REAL
+            currency_name VARCHAR UNIQUE,
+            rate NUMERIC
         )
         ''')
     finally:
@@ -191,7 +192,7 @@ async def process_convert_currency(message: types.Message, state: FSMContext):
 async def process_convert_amount(message: types.Message, state: FSMContext):
     pool = dp["pool"]
     try:
-        amount = float(message.text.replace(",", "."))
+        amount = Decimal(message.text.replace(",", "."))
         if amount <= 0:
             raise ValueError
 
@@ -383,7 +384,7 @@ async def process_new_rate(message: types.Message, state: FSMContext):
 
     await message.answer(f"✅ Курс валюты {currency_name} обновлен: {rate} RUB.", reply_markup=menu)
     await state.clear()
-    
+
 # Запуск бота
 async def main():
     await init_db()
