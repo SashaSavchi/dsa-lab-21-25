@@ -49,11 +49,6 @@ def load_currency():
         rate = data.get('rate')  # Извлекаем курс валюты
         
         log_request("LOAD", currency_name, rate)  # Логируем запрос
-        
-        # # Проверяем наличие обязательных полей
-        # if not currency_name or not rate:
-        #     logger.warning("Invalid JSON data received")
-        #     return jsonify({"message": "Invalid JSON data"}), 400
 
         with conn.cursor() as cursor:
             # Проверяем, существует ли уже такая валюта
@@ -85,11 +80,6 @@ def update_currency():
         
         log_request("UPDATE", currency_name, new_rate)  # Логируем запрос
         
-        # # Проверяем наличие обязательных полей
-        # if not currency_name or not new_rate:
-        #     logger.warning("Invalid JSON data received")
-        #     return jsonify({"message": "Invalid JSON data"}), 400
-
         with conn.cursor() as cursor:
             # Проверяем, существует ли валюта
             cursor.execute("SELECT * FROM currencies WHERE currency_name = %s", (currency_name,))
@@ -119,11 +109,6 @@ def delete_currency():
         
         log_request("DELETE", currency_name)  # Логируем запрос
         
-        # Проверяем наличие обязательного поля
-        # if not currency_name:
-        #     logger.warning("Invalid JSON data received")
-        #     return jsonify({"message": "Invalid JSON data"}), 400
-
         with conn.cursor() as cursor:
             # Проверяем, существует ли валюта
             cursor.execute("SELECT * FROM currencies WHERE currency_name = %s", (currency_name,))

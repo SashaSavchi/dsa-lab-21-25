@@ -49,11 +49,6 @@ def convert_currency():
     # Логируем запрос
     log_request("CONVERT", currency_name, amount)
     
-    # # Проверяем наличие обязательных параметров
-    # if not currency_name or not amount:
-    #     logger.warning("Missing parameters in convert request")
-    #     return jsonify({"message": "Missing currency_name or amount parameter"}), 400
-
     # Пробуем преобразовать amount в число
     try:
         amount = float(amount)
